@@ -1,37 +1,36 @@
-/* night-mode-specific colours */
 .review-count {
-  color: #0a0;
+  color: var(--review-count);
 }
 
 .new-count {
-  color: #00a;
+  color: var(--new-count);
 }
 
 .learn-count {
-  color: #C35617;
+  color: var(--learn-count);
 }
 
 .zero-count {
-  color: #ddd;
+  color: var(--zero-count);
 }
 
 .nightMode .review-count {
-  color: #5CcC00;
+  color: var(--review-count);
 }
 .nightMode .new-count {
-  color: #77ccff;
+  color: var(--new-count);
 }
 .nightMode .learn-count {
-  color: #FF935B;
+  color: var(--learn-count);
 }
 .nightMode .zero-count {
-  color: #444;
+  color: var(--zero-count);
 }
 
 /* Copyright: Ankitects Pty Ltd and contributors
  * License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html */
 a.deck {
-  color: black;
+  color: var(--text-fg);
   text-decoration: none;
   min-width: 5em;
   display: inline-block;
@@ -42,7 +41,7 @@ a.deck:hover {
 }
 
 tr.deck td {
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid var(--faint-border);
 }
 
 tr.top-level-drag-row td {
@@ -54,7 +53,7 @@ td {
 }
 
 tr.drag-hover td {
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid var(--border);
 }
 
 body {
@@ -63,7 +62,7 @@ body {
 }
 
 .current {
-  background-color: rgba(231, 231, 231, 0.3)/*  #e7e7e7; */
+  /*background-color: rgba(231, 231, 231, 0.3) */var(--faint-border);
 }
 
 .decktd {
@@ -80,14 +79,14 @@ body {
 }
 
 .collapse {
-  color: black;
+  color: var(--text-fg);
   text-decoration: none;
   display: inline-block;
   width: 1em;
 }
 
 .filtered {
-  color: #00a !important;
+  color: var(--link) !important;
 }
 
 .gears {
@@ -97,36 +96,18 @@ body {
   padding-top: 0.2em;
 }
 
-.nightMode a.deck {
-  color: white;
-}
-.nightMode tr.deck td {
-  border-bottom-color: #29292B;
-}
-.nightMode tr.drag-hover td {
-  border-bottom-color: #777;
-}
-.nightMode .current {
-  background-color: rgba(41, 41, 43, 0.3); /* #29292B; */
-}
-.nightMode .collapse {
-  color: white;
-}
 .nightMode .gears {
-  filter: invert(180);
-}
-.nightMode .filtered {
-  color: #77ccff !important;
+  /* filter: invert(180); */
 }
 body::before {
 
-    background-image: url("/_addons/zCustomback-gui/user_files/background/AnKing.png"); 
+    background-image: url("/_addons/addon/user_files/background/Milkyway.png"); 
     background-size: cover;  
     background-attachment: fixed!important; 
     background-repeat: no-repeat;
     background-position: center;
     background-color: !important; 
-    opacity: 0.22;
+    opacity: 1;
     content: "";
     top: 0;
     left: 0;
@@ -135,6 +116,6 @@ body::before {
     position: fixed;
     z-index: -99;
     will-change: transform;
-    transform: scale(1.0);
+    transform: scale(1);
     
 }

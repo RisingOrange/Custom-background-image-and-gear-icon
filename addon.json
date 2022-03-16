@@ -1,0 +1,14 @@
+{
+    "display_name": "Custom background and gear icon",
+    "module_name": "custom_background_and_gear_icon",
+    "repo_name": "Custom-background-image-and-gear-icon",
+    "ankiweb_id": "1210908941",
+    "author": "",
+    "conflicts": [],
+    "targets": [
+        "anki21"
+    ],
+    "min_anki_version": "2.1.36",
+    "max_tested_anki_version": "2.1.49",
+    "ankiweb_conflicts_with_local": false
+}

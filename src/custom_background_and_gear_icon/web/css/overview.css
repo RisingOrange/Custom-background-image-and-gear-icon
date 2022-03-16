@@ -1,31 +1,30 @@
-/* night-mode-specific colours */
 .review-count {
-  color: #0a0;
+  color: var(--review-count);
 }
 
 .new-count {
-  color: #00a;
+  color: var(--new-count);
 }
 
 .learn-count {
-  color: #C35617;
+  color: var(--learn-count);
 }
 
 .zero-count {
-  color: #ddd;
+  color: var(--zero-count);
 }
 
 .nightMode .review-count {
-  color: #5CcC00;
+  color: var(--review-count);
 }
 .nightMode .new-count {
-  color: #77ccff;
+  color: var(--new-count);
 }
 .nightMode .learn-count {
-  color: #FF935B;
+  color: var(--learn-count);
 }
 .nightMode .zero-count {
-  color: #444;
+  color: var(--zero-count);
 }
 
 /* Copyright: Ankitects Pty Ltd and contributors
@@ -40,7 +39,7 @@ h3 {
 
 .descfont {
   padding: 1em;
-  color: #333;
+  color: var(--slightly-grey-text);
 }
 
 .description {
@@ -60,19 +59,15 @@ h3 {
 .dyn {
   text-align: center;
 }
-
-.nightMode .descfont {
-  color: #ccc;
-}
 body::before {
 
-    background-image: url("/_addons/zCustomback-gui/user_files/background/AnKing.png"); 
+    background-image: url("/_addons/addon/user_files/background/Milkyway.png"); 
     background-size: cover;  
     background-attachment: fixed!important; 
     background-repeat: no-repeat;
     background-position: center;
     background-color: !important; 
-    opacity: 0.22;
+    opacity: 1;
     content: "";
     top: 0;
     left: 0;
@@ -81,6 +76,6 @@ body::before {
     position: fixed;
     z-index: -99;
     will-change: transform;
-    transform: scale(1.0);
+    transform: scale(1);
     
 }

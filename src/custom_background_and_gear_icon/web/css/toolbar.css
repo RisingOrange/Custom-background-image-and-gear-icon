@@ -1,10 +1,9 @@
-/* night-mode-specific colours */
 /* Copyright: Ankitects Pty Ltd and contributors
  * License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html */
 #header {
   padding: 3px;
   font-weight: bold;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid var(--border);
 }
 
 .tdcenter {
@@ -26,7 +25,7 @@ body {
   padding-right: 12px;
   padding-left: 12px;
   text-decoration: none;
-  color: black;
+  color: var(--text-fg);
 }
 
 .hitem:hover {
@@ -37,15 +36,12 @@ body {
   outline: 0;
 }
 
-.nightMode .hitem {
-  color: white;
-}
 .nightMode #header {
-  border-bottom-color: #29292B;
+  border-bottom-color: var(--faint-border);
 }
 
 .isMac.nightMode #header {
-  border-bottom-color: #3a3a3a;
+  border-bottom-color: var(--frame-bg);
 }
 
 @keyframes spin {
@@ -71,15 +67,23 @@ body {
   margin-bottom: -3px;
   visibility: hidden;
 }
+
+.normal-sync {
+  color: var(--new-count);
+}
+
+.full-sync {
+  color: var(--learn-count);
+}
 body::before {
 
-    background-image: url("/_addons/zCustomback-gui/user_files/background/AnKing.png"); 
+    background-image: url("/_addons/addon/user_files/background/Milkyway.png"); 
     background-size: cover;  
     background-attachment: fixed!important; 
     background-repeat: no-repeat;
     background-position: top;
     background-color: !important; 
-    opacity: 0.22;
+    opacity: 1;
     content: "";
     top: 0;
     left: 0;
@@ -88,6 +92,6 @@ body::before {
     position: fixed;
     z-index: -99;
     will-change: transform;
-    transform: scale(1.0);
+    transform: scale(1);
     
-}
+}  

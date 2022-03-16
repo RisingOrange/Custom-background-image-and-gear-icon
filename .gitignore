@@ -1,10 +1,16 @@
+build/
+tools/
 meta.json
 
+src/*/gui/forms/anki*
+src/*/gui/resources/anki*
+
 __pycache__/
+.mypy_cache/
+.pytest_cache/
 *.py[cod]
 *$py.class
 *.so
-
-.mypy_cache/
 .dmypy.json
 dmypy.json
+.cache

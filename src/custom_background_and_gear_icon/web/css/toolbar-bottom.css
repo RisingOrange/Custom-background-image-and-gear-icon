@@ -8,13 +8,13 @@
 }
 body::before {
 
-    background-image: url("/_addons/zCustomback-gui/user_files/background/AnKing.png"); 
+    background-image: url("/_addons/addon/user_files/background/Milkyway.png"); 
     background-size: cover;  
     background-attachment: fixed!important; 
     background-repeat: no-repeat;
     background-position: bottom;;
     background-color: !important; 
-    opacity: 0.22;
+    opacity: 1;
     content: "";
     top: 0;
     left: 0;
@@ -23,6 +23,6 @@ body::before {
     position: fixed;
     z-index: -99;
     will-change: transform;
-    transform: scale(1.0);
+    transform: scale(1);
     
 }
