@@ -6,7 +6,7 @@ import os
 import random
 
 from aqt.editor import pics
-from aqt import gui_hooks
+from aqt.gui_hooks import state_did_change
 
 from .config import addon_path, addonfoldername, gc
 
@@ -75,15 +75,15 @@ def get_bg_img():
         return ""
 
 
-imgname = get_bg_img()
+img_name = get_bg_img()
 def reset_image(new_state, old_state):
-    global imgname
+    global img_name
     if new_state == "deckBrowser":
-        imgname = get_bg_img()
-gui_hooks.state_did_change.append(reset_image)
+        img_name = get_bg_img()
+state_did_change.append(reset_image)
 
 def adjust_deckbrowser_css22(filecontent):
-    result = set_bg_img(filecontent, imgname, "body")
+    result = set_bg_img(filecontent, img_name, "body")
     #do not invert gears if using personal image
     if gc("Image name for gear") != "gears.svg":
         old_gears = "filter: invert(180);"
@@ -92,16 +92,16 @@ def adjust_deckbrowser_css22(filecontent):
     return result
 
 def adjust_toolbar_css22(filecontent):
-    return set_bg_img(filecontent, imgname, "top")
+    return set_bg_img(filecontent, img_name, "top")
 
 def adjust_bottomtoolbar_css22(filecontent):  
-    return set_bg_img(filecontent, imgname, "bottom")
+    return set_bg_img(filecontent, img_name, "bottom")
 
 def adjust_overview_css22(filecontent):  
-    return set_bg_img(filecontent, imgname, "body")
+    return set_bg_img(filecontent, img_name, "body")
 
 def adjust_reviewer_css22(filecontent): 
-    return set_bg_img(filecontent, imgname, "body", True)
+    return set_bg_img(filecontent, img_name, "body", True)
 
 def adjust_reviewerbottom_css22(filecontent):  
-    return set_bg_img(filecontent, imgname, "bottom", True)
+    return set_bg_img(filecontent, img_name, "bottom", True)

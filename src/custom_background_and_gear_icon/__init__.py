@@ -6,20 +6,19 @@
 
 import os
 import random
+from typing import List
 
+from anki import version as anki_version  # type: ignore
 from anki.utils import pointVersion
 from aqt import gui_hooks, mw
 from aqt.addons import *
 from aqt.editor import pics
-
 # for the toolbar buttons
 from aqt.qt import *
 
 from .adjust_css_files22 import *
 from .config import addon_path, addonfoldername, gc
 from .gui_updatemanager import setupMenu
-
-setupMenu()
 
 css_folder_for_anki_version = {
     "22": "22",
@@ -49,7 +48,6 @@ css_folder_for_anki_version = {
     "46": "36",
 }
 
-
 version = pointVersion()
 if int(version) in css_folder_for_anki_version:
     version_folder = css_folder_for_anki_version[str(version)]
@@ -58,16 +56,33 @@ else:  # for newer Anki versions try the latest version and hope for the best
         max(css_folder_for_anki_version, key=int)
     ]
 
-
 SOURCE_ABSOLUTE = os.path.join(addon_path, "sources", "css", version_folder)
 WEB_ABSOLUTE = os.path.join(addon_path, "web", "css")
+CSS_FILES_TO_REPLACE = [
+    os.path.basename(f) for f in os.listdir(WEB_ABSOLUTE) if f.endswith(".css")
+]
+WEB_EXPORTS_REGEX = r"(user_files.*|web.*)"
 
-REGEX = r"(user_files.*|web.*)"
-mw.addonManager.setWebExports(__name__, REGEX)
+
+def main():
+    setupMenu()
+
+    mw.addonManager.setWebExports(__name__, WEB_EXPORTS_REGEX)
+    update_css_files()
+
+    gui_hooks.state_did_change.append(maybe_update_css_files)
+    gui_hooks.webview_will_set_content.append(include_css_files)
+    gui_hooks.deck_browser_will_render_content.append(replace_gears)
+
+    def on_config_update(config):
+        update_css_files()
+        mw.moveToState("deckBrowser")
+
+    mw.addonManager.setConfigUpdatedAction(__name__, on_config_update)
 
 
-def update_css():
-    # on startup: combine template files with config and write into webexports folder
+def update_css_files():
+    # combine template files with config and write into webexports folder
     change_copy = [
         os.path.basename(f) for f in os.listdir(SOURCE_ABSOLUTE) if f.endswith(".css")
     ]
@@ -114,58 +129,41 @@ def update_css():
             f.write(content)
 
 
-update_css()
-
 # reset background when refreshing page (for use with "random" setting)
-def reset_background(new_state, old_state):
-    if new_state == "deckBrowser":
-        update_css()
-        from anki import version as anki_version
+def maybe_update_css_files(new_state, old_state):
+    if new_state != "deckBrowser":
+        return
 
-        old_anki = tuple(int(i) for i in anki_version.split(".")) < (2, 1, 27)
-        if not old_anki:
-            # mw.reset(True)
-            # Anki 2.1.28 and up no longer fully redraw the toolbar on mw reset,
-            # so trigger the redraw manually:
-            mw.toolbar.redraw()
+    update_css_files()
+    if not tuple(int(i) for i in anki_version.split(".")) < (2, 1, 27):
+        mw.toolbar.redraw()
 
 
-gui_hooks.state_did_change.append(reset_background)
-
-# reset background when changing config
-def apply_config_changes(config):
-    update_css()
-    mw.moveToState("deckBrowser")
-
-
-mw.addonManager.setConfigUpdatedAction(__name__, apply_config_changes)
-
-
-css_files_to_replace = [
-    os.path.basename(f) for f in os.listdir(WEB_ABSOLUTE) if f.endswith(".css")
-]
-
-from anki.utils import pointVersion
-
-
-def maybe_adjust_filename_for_2136(filename):
+def maybe_adjust_file_name(file_name):
     if pointVersion() >= 36:
-        filename = filename.lstrip("css/")
-    return filename
+        file_name = file_name.lstrip("css/")
+    return file_name
 
 
-def replace_css(web_content, context):
-    for idx, filename in enumerate(web_content.css):
-        filename = maybe_adjust_filename_for_2136(filename)
-        if filename in css_files_to_replace:
-            web_content.css[idx] = f"/_addons/{addonfoldername}/web/css/{filename}"
-            web_content.css.append(
-                f"/_addons/{addonfoldername}/user_files/css/custom_{filename}"
+def include_css_files(web_content, context):
+    new_css: List[str] = web_content.css[:]
+    for idx, file_name in enumerate(web_content.css):
+        file_name = maybe_adjust_file_name(file_name)
+        if file_name in CSS_FILES_TO_REPLACE:
+            new_css[idx] = f"/_addons/{addonfoldername}/web/css/{file_name}"
+            new_css.append(
+                f"/_addons/{addonfoldername}/user_files/css/custom_{file_name}"
             )
-            break
+    web_content.css = new_css
 
 
-gui_hooks.webview_will_set_content.append(replace_css)
+def replace_gears(deck_browser, content):
+    old = """<img src='/_anki/imgs/gears.svg'"""
+    new = f"""<img src='/_addons/{addonfoldername}/user_files/gear/{get_gearfile()}'"""
+    if gc("Image name for gear") != "gears.svg":
+        content.tree = content.tree.replace(old, new)
+    else:
+        content.tree = content.tree.replace(old, old)
 
 
 def get_gearfile():
@@ -185,13 +183,4 @@ def get_gearfile():
             return ""
 
 
-def replace_gears(deck_browser, content):
-    old = """<img src='/_anki/imgs/gears.svg'"""
-    new = f"""<img src='/_addons/{addonfoldername}/user_files/gear/{get_gearfile()}'"""
-    if gc("Image name for gear") != "gears.svg":
-        content.tree = content.tree.replace(old, new)
-    else:
-        content.tree = content.tree.replace(old, old)
-
-
-gui_hooks.deck_browser_will_render_content.append(replace_gears)
+main()

@@ -18,8 +18,9 @@ from .gui.forms import settings_dialog
 
 conf = getUserOption()
 
-imgfolder = os.path.join(addon_path, "user_files")
+USER_FILES_FOLDER = os.path.join(addon_path, "user_files")
 RE_BG_IMG_EXT = "*.gif *.png *.apng *.jpg *.jpeg *.svg *.ico *.bmp"
+ANKI_VERSION_TUPLE = tuple(int(i) for i in anki_version.split("."))
 
 
 def getMenu(parent, menuName):
@@ -34,7 +35,6 @@ def getMenu(parent, menuName):
 
 
 class SettingsDialog(QDialog):
-    timer = None
 
     def __init__(self, parent):
         super().__init__(mw)
@@ -68,7 +68,7 @@ class SettingsDialog(QDialog):
         f.RestoreButton.clicked.connect(self.resetConfig)
 
         f.pushButton_randomize.clicked.connect(self.random)
-        f.pushButton_imageFolder.clicked.connect(lambda: openFolder(imgfolder))
+        f.pushButton_imageFolder.clicked.connect(lambda: openFolder(USER_FILES_FOLDER))
         f.pushButton_videoTutorial.clicked.connect(lambda _: self.openWeb("video"))
 
         f.toolButton_website.clicked.connect(lambda _: self.openWeb("anking"))
@@ -321,51 +321,31 @@ class SettingsDialog(QDialog):
         self.close()
         SettingsDialogExecute()
 
-    def _refresh(self, ms=100):
-        if self.timer:
-            self.timer.stop()
-
-        anki_version_tuple = tuple(int(i) for i in anki_version.split("."))
-        if anki_version_tuple < (2, 1, 27):
-            self.timer = mw.progress.timer(ms, lambda: mw.reset(True), False)
-        elif anki_version_tuple < (2, 1, 45):
-            self.timer = mw.progress.timer(ms, self._resetMainWindow, False)
+    def _refresh(self):
+        if ANKI_VERSION_TUPLE < (2, 1, 27):
+            mw.reset(True)
+        elif ANKI_VERSION_TUPLE < (2, 1, 45):
+            mw.reset(True)
+            mw.toolbar.draw()
         else:
+            # this triggers the css update hooked to state_did_change in __init__.py
+            mw.moveToState("deckBrowser")
 
-            def on_timer():
-
-                # this triggers the css update hooked to state_did_change in __init__.py
-                mw.moveToState("deckBrowser")
-
-                # works around stylesheets getting cached
-                cmd = """
-                (function(){
-                    var links = document.getElementsByTagName("link");
-                    for (var cl in links)
-                    {
-                        var link = links[cl];
-                        if (link.rel === "stylesheet")
-                            link.href += "?v=" + Date.now().toString()
-                    }
-                })()
-                """
-                mw.deckBrowser.web.eval(cmd)
-                mw.toolbar.web.eval(cmd)
-                mw.bottomWeb.eval(cmd)
-
-            self.timer = mw.progress.timer(ms, on_timer, False)
-
-    def _resetMainWindow(self):
-        mw.reset(True)
-        # Anki 2.1.28 and up no longer fully redraw the toolbar on mw reset,
-        # so trigger the redraw manually:
-        mw.toolbar.draw()
-        # NOTE (Glutanimate):
-        # This is not an ideal solution as forcing a full redraw might
-        # interfere with the background sync indicator and potentially other
-        # add-ons in the future. For a definitive fix please consider refactoring
-        # the add-on so that the web content is updated dynamically without
-        # having to reload the web view.
+            # works around stylesheets getting cached
+            cmd = """
+            (function(){
+                var links = document.getElementsByTagName("link");
+                for (var cl in links)
+                {
+                    var link = links[cl];
+                    if (link.rel === "stylesheet")
+                        link.href += "?v=" + Date.now().toString()
+                }
+            })()
+            """
+            mw.deckBrowser.web.eval(cmd)
+            mw.toolbar.web.eval(cmd)
+            mw.bottomWeb.eval(cmd)
 
 
 def SettingsDialogExecute():
