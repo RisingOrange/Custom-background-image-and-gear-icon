@@ -331,9 +331,29 @@ class SettingsDialog(QDialog):
         elif anki_version_tuple < (2, 1, 45):
             self.timer = mw.progress.timer(ms, self._resetMainWindow, False)
         else:
-            self.timer = mw.progress.timer(
-                ms, lambda: mw.moveToState("deckBrowser"), False
-            )
+
+            def on_timer():
+
+                # this triggers the css update hooked to state_did_change in __init__.py
+                mw.moveToState("deckBrowser")
+
+                # works around stylesheets getting cached
+                cmd = """
+                (function(){
+                    var links = document.getElementsByTagName("link");
+                    for (var cl in links)
+                    {
+                        var link = links[cl];
+                        if (link.rel === "stylesheet")
+                            link.href += "?v=" + Date.now().toString()
+                    }
+                })()
+                """
+                mw.deckBrowser.web.eval(cmd)
+                mw.toolbar.web.eval(cmd)
+                mw.bottomWeb.eval(cmd)
+
+            self.timer = mw.progress.timer(ms, on_timer, False)
 
     def _resetMainWindow(self):
         mw.reset(True)
