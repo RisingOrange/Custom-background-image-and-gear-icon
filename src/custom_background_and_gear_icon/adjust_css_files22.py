@@ -11,7 +11,7 @@ from aqt import gui_hooks
 from .config import addon_path, addonfoldername, gc
 
 
-def add_bg_img(filecontent, imgname, location, review=False):
+def set_bg_img(filecontent, imgname, location, review=False):
     #add background image for normal and nightmode
     img_web_rel_path  = f"/_addons/{addonfoldername}/user_files/background/{imgname}"
     old = "/*AnKing edits*/"
@@ -59,8 +59,8 @@ def add_bg_img(filecontent, imgname, location, review=False):
     """
 
     new = f"""{bracket_start}\n{background}\n{bracket_close}"""   
-    cont = filecontent.replace(old, new) 
-    return cont
+    result = filecontent.replace(old, new) 
+    return result
 
 def get_bg_img():
     bg_abs_path = os.path.join(addon_path, "user_files", "background")
@@ -83,30 +83,25 @@ def reset_image(new_state, old_state):
 gui_hooks.state_did_change.append(reset_image)
 
 def adjust_deckbrowser_css22(filecontent):
-    cont = add_bg_img(filecontent, imgname, "body")
+    result = set_bg_img(filecontent, imgname, "body")
     #do not invert gears if using personal image
     if gc("Image name for gear") != "gears.svg":
         old_gears = "filter: invert(180);"
         new_gears = "/* filter: invert(180); */"
-        cont = cont.replace(old_gears, new_gears)
-    return cont
+        result = result.replace(old_gears, new_gears)
+    return result
 
 def adjust_toolbar_css22(filecontent):
-    cont = add_bg_img(filecontent, imgname, "top")
-    return cont
+    return set_bg_img(filecontent, imgname, "top")
 
 def adjust_bottomtoolbar_css22(filecontent):  
-    cont = add_bg_img(filecontent, imgname, "bottom")
-    return cont
+    return set_bg_img(filecontent, imgname, "bottom")
 
 def adjust_overview_css22(filecontent):  
-    cont = add_bg_img(filecontent, imgname, "body")
-    return cont
+    return set_bg_img(filecontent, imgname, "body")
 
 def adjust_reviewer_css22(filecontent): 
-    cont = add_bg_img(filecontent, imgname, "body", True)
-    return cont    
+    return set_bg_img(filecontent, imgname, "body", True)
 
 def adjust_reviewerbottom_css22(filecontent):  
-    cont = add_bg_img(filecontent, imgname, "bottom", True)
-    return cont       
+    return set_bg_img(filecontent, imgname, "bottom", True)

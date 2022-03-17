@@ -50,68 +50,68 @@ css_folder_for_anki_version = {
 }
 
 
-v = pointVersion()
-if int(v) in css_folder_for_anki_version:
-    version_folder = css_folder_for_anki_version[str(v)]
+version = pointVersion()
+if int(version) in css_folder_for_anki_version:
+    version_folder = css_folder_for_anki_version[str(version)]
 else:  # for newer Anki versions try the latest version and hope for the best
     version_folder = css_folder_for_anki_version[
         max(css_folder_for_anki_version, key=int)
     ]
 
 
-source_absolute = os.path.join(addon_path, "sources", "css", version_folder)
-web_absolute = os.path.join(addon_path, "web", "css")
+SOURCE_ABSOLUTE = os.path.join(addon_path, "sources", "css", version_folder)
+WEB_ABSOLUTE = os.path.join(addon_path, "web", "css")
 
-regex = r"(user_files.*|web.*)"
-mw.addonManager.setWebExports(__name__, regex)
+REGEX = r"(user_files.*|web.*)"
+mw.addonManager.setWebExports(__name__, REGEX)
 
 
 def update_css():
     # on startup: combine template files with config and write into webexports folder
     change_copy = [
-        os.path.basename(f) for f in os.listdir(source_absolute) if f.endswith(".css")
+        os.path.basename(f) for f in os.listdir(SOURCE_ABSOLUTE) if f.endswith(".css")
     ]
-    for f in change_copy:
-        with open(os.path.join(source_absolute, f)) as FO:
-            filecontent = FO.read()
+    for file_name in change_copy:
+        with open(os.path.join(SOURCE_ABSOLUTE, file_name)) as f:
+            content = f.read()
 
-        if v == 22:
-            if f == "deckbrowser.css":
-                filecontent = adjust_deckbrowser_css22(filecontent)
-            if f == "toolbar.css" and gc("Toolbar image"):
-                filecontent = adjust_toolbar_css22(filecontent)
-            if f == "overview.css":
-                filecontent = adjust_overview_css22(filecontent)
-            if f == "toolbar-bottom.css" and gc("Toolbar image"):
-                filecontent = adjust_bottomtoolbar_css22(filecontent)
-            if f == "reviewer.css" and gc("Reviewer image"):
-                filecontent = adjust_reviewer_css22(filecontent)
+        if version == 22:
+            if file_name == "deckbrowser.css":
+                content = adjust_deckbrowser_css22(content)
+            if file_name == "toolbar.css" and gc("Toolbar image"):
+                content = adjust_toolbar_css22(content)
+            if file_name == "overview.css":
+                content = adjust_overview_css22(content)
+            if file_name == "toolbar-bottom.css" and gc("Toolbar image"):
+                content = adjust_bottomtoolbar_css22(content)
+            if file_name == "reviewer.css" and gc("Reviewer image"):
+                content = adjust_reviewer_css22(content)
             if (
-                f == "reviewer-bottom.css"
+                file_name == "reviewer-bottom.css"
                 and gc("Reviewer image")
                 and gc("Toolbar image")
             ):
-                filecontent = adjust_reviewerbottom_css22(filecontent)
+                content = adjust_reviewerbottom_css22(content)
 
         # for later versions: try the latest
         # this code will likely change when new Anki versions are released which might require
         # updates of this add-on.
         else:
-            if f == "deckbrowser.css":
-                filecontent = adjust_deckbrowser_css22(filecontent)
-            if f == "toolbar.css" and gc("Toolbar image"):
-                filecontent = adjust_toolbar_css22(filecontent)
-            if f == "overview.css":
-                filecontent = adjust_overview_css22(filecontent)
-            if f == "toolbar-bottom.css" and gc("Toolbar image"):
-                filecontent = adjust_bottomtoolbar_css22(filecontent)
-            if f == "reviewer.css" and gc("Reviewer image"):
-                filecontent = adjust_reviewer_css22(filecontent)
-            if f == "reviewer-bottom.css":  # and gc("Reviewer image"):
-                filecontent = adjust_reviewerbottom_css22(filecontent)
+            if file_name == "deckbrowser.css":
+                content = adjust_deckbrowser_css22(content)
+            if file_name == "toolbar.css" and gc("Toolbar image"):
+                content = adjust_toolbar_css22(content)
+            if file_name == "overview.css":
+                content = adjust_overview_css22(content)
+            if file_name == "toolbar-bottom.css" and gc("Toolbar image"):
+                content = adjust_bottomtoolbar_css22(content)
+            if file_name == "reviewer.css" and gc("Reviewer image"):
+                content = adjust_reviewer_css22(content)
+            if file_name == "reviewer-bottom.css":  # and gc("Reviewer image"):
+                content = adjust_reviewerbottom_css22(content)
 
-        with open(os.path.join(web_absolute, f), "w") as FO:
-            FO.write(filecontent)
+        with open(os.path.join(WEB_ABSOLUTE, file_name), "w") as f:
+            f.write(content)
 
 
 update_css()
@@ -123,12 +123,11 @@ def reset_background(new_state, old_state):
         from anki import version as anki_version
 
         old_anki = tuple(int(i) for i in anki_version.split(".")) < (2, 1, 27)
-
         if not old_anki:
             # mw.reset(True)
             # Anki 2.1.28 and up no longer fully redraw the toolbar on mw reset,
             # so trigger the redraw manually:
-            mw.toolbar.draw()
+            mw.toolbar.redraw()
 
 
 gui_hooks.state_did_change.append(reset_background)
@@ -137,14 +136,13 @@ gui_hooks.state_did_change.append(reset_background)
 def apply_config_changes(config):
     update_css()
     mw.moveToState("deckBrowser")
-    # mw.toolbar.draw()
 
 
 mw.addonManager.setConfigUpdatedAction(__name__, apply_config_changes)
 
 
 css_files_to_replace = [
-    os.path.basename(f) for f in os.listdir(web_absolute) if f.endswith(".css")
+    os.path.basename(f) for f in os.listdir(WEB_ABSOLUTE) if f.endswith(".css")
 ]
 
 from anki.utils import pointVersion
@@ -164,6 +162,7 @@ def replace_css(web_content, context):
             web_content.css.append(
                 f"/_addons/{addonfoldername}/user_files/css/custom_{filename}"
             )
+            break
 
 
 gui_hooks.webview_will_set_content.append(replace_css)
