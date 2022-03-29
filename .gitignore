@@ -2,8 +2,8 @@ build/
 tools/
 meta.json
 
-src/*/gui/forms/anki*
-src/*/gui/resources/anki*
+src/*/gui/forms/*
+src/*/gui/resources/*
 
 __pycache__/
 .mypy_cache/

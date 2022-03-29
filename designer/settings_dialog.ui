@@ -497,8 +497,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="AnKing/icons.qrc">
-         <normaloff>CustomBackground:AnkiPalace_no_text.png</normaloff>CustomBackground:AnkiPalace_no_text.png/AnkiPalace_no_text.png</iconset>
+        <iconset resource="../resources/icons.qrc">
+         <normaloff>:/CustomBackground/AnkiPalace_no_text.png</normaloff>:/CustomBackground/AnkiPalace_no_text.png/AnkiPalace_no_text.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -546,8 +546,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="AnKing/icons.qrc">
-         <normaloff>CustomBackground:AnKingSmall.png</normaloff>CustomBackground:AnKingSmall.png</iconset>
+        <iconset resource="../resources/icons.qrc">
+         <normaloff>:/CustomBackground/AnKingSmall.png</normaloff>:/CustomBackground/AnKingSmall.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -569,8 +569,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="AnKing/icons.qrc">
-         <normaloff>CustomBackground:YouTube.png</normaloff>CustomBackground:YouTube.png</iconset>
+        <iconset resource="../resources/icons.qrc">
+         <normaloff>:/CustomBackground/YouTube.png</normaloff>:/CustomBackground/YouTube.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -592,8 +592,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="AnKing/icons.qrc">
-         <normaloff>CustomBackground:Patreon.png</normaloff>CustomBackground:Patreon.png</iconset>
+        <iconset resource="../resources/icons.qrc">
+         <normaloff>:/CustomBackground/Patreon.png</normaloff>:/CustomBackground/Patreon.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -615,8 +615,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="AnKing/icons.qrc">
-         <normaloff>CustomBackground:Instagram.png</normaloff>CustomBackground:Instagram.png</iconset>
+        <iconset resource="../resources/icons.qrc">
+         <normaloff>:/CustomBackground/Instagram.png</normaloff>:/CustomBackground/Instagram.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -638,8 +638,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="AnKing/icons.qrc">
-         <normaloff>CustomBackground:Facebook.png</normaloff>CustomBackground:Facebook.png</iconset>
+        <iconset resource="../resources/icons.qrc">
+         <normaloff>:/CustomBackground/Facebook.png</normaloff>:/CustomBackground/Facebook.png</iconset>
        </property>
        <property name="iconSize">
         <size>

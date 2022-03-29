@@ -18,6 +18,7 @@ from aqt.qt import *
 
 from .adjust_css_files22 import *
 from .config import addon_path, addonfoldername, gc
+from .gui.resources import initialize_qt_resources
 from .gui_updatemanager import setupMenu
 
 css_folder_for_anki_version = {
@@ -65,6 +66,7 @@ WEB_EXPORTS_REGEX = r"(user_files.*|web.*)"
 
 
 def main():
+    initialize_qt_resources()
     setupMenu()
 
     mw.addonManager.setWebExports(__name__, WEB_EXPORTS_REGEX)
